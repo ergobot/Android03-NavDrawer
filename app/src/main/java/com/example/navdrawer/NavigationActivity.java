@@ -1,8 +1,11 @@
 package com.example.navdrawer;
 
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -13,13 +16,23 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 
-public class MainActivity extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener {
+import com.example.navdrawer.fragments.GalleryFragment;
+import com.example.navdrawer.fragments.ImportFragment;
+import com.example.navdrawer.fragments.SlideshowFragment;
+import com.example.navdrawer.fragments.ToolsFragment;
+
+public class NavigationActivity extends AppCompatActivity
+        implements
+        NavigationView.OnNavigationItemSelectedListener,
+        ImportFragment.OnFragmentInteractionListener,
+        GalleryFragment.OnFragmentInteractionListener,
+        SlideshowFragment.OnFragmentInteractionListener,
+        ToolsFragment.OnFragmentInteractionListener{
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_navigation);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
@@ -80,22 +93,75 @@ public class MainActivity extends AppCompatActivity
         // Handle navigation view item clicks here.
         int id = item.getItemId();
 
+        FragmentManager fragmentManager = this.getSupportFragmentManager();
+
         if (id == R.id.nav_camera) {
-            // Handle the camera action
+            // Change to the import fragment
+            ImportFragment importFragment = (ImportFragment) fragmentManager.findFragmentByTag(ImportFragment.TAG);
+            if(importFragment == null) {
+                fragmentManager.beginTransaction().replace(R.id.container, ImportFragment.newInstance(id), ImportFragment.TAG).commit();
+            }
+
         } else if (id == R.id.nav_gallery) {
+            // Chang to the gallery fragment
+            GalleryFragment galleryFragment = (GalleryFragment) fragmentManager.findFragmentByTag(GalleryFragment.TAG);
+            if(galleryFragment == null) {
+                fragmentManager.beginTransaction().replace(R.id.container, GalleryFragment.newInstance(id), GalleryFragment.TAG).commit();
+            }
 
         } else if (id == R.id.nav_slideshow) {
+            // Change to the slideshow fragment
+            SlideshowFragment slideShowFragment = (SlideshowFragment) fragmentManager.findFragmentByTag(SlideshowFragment.TAG);
+            if(slideShowFragment == null) {
+                fragmentManager.beginTransaction().replace(R.id.container, SlideshowFragment.newInstance(id), SlideshowFragment.TAG).commit();
+            }
 
         } else if (id == R.id.nav_manage) {
+            // Change to the slideshow fragment
+            ToolsFragment toolsFragment = (ToolsFragment) fragmentManager.findFragmentByTag(ToolsFragment.TAG);
+            if(toolsFragment == null) {
+                fragmentManager.beginTransaction().replace(R.id.container, ToolsFragment.newInstance(id), ToolsFragment.TAG).commit();
+            }
 
         } else if (id == R.id.nav_share) {
+            // Make it do something..
+            // Doesn't currently do anything
+
 
         } else if (id == R.id.nav_send) {
+            // Make it do something else..
+            // Doesn't currently do anything
+
 
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
+    }
+
+
+    public void onSectionAttached(int number){
+
+        switch(number) {
+            case 1:
+//                 mTitle = getString(R.string.title_import);
+                break;
+            case 2:
+                // mTitle = getString(R.string.title_gallery);
+                break;
+            case 3:
+                // mTitle = getString(R.string.title_slideshow);
+                break;
+            case 4:
+                // mTitle = getString(R.string.title_tools);
+                break;
+        }
+
+    }
+
+    @Override
+    public void onFragmentInteraction(Uri uri) {
+        // this.onSectionAttached(position);
     }
 }
